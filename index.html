@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HAUTE | Fashion Curator</title>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Baskervville&family=Italiana&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="loader">
+      <canvas id="loaderCanvas"></canvas>
+      <div class="loader-text">
+        <span>H</span>
+        <span>A</span>
+        <span>U</span>
+        <span>T</span>
+        <span>E</span>
+      </div>
+    </div>
+    <div class="content">
+      <!-- Custom Cursor -->
+      <div class="cursor"></div>
+      <div class="cursor-follower"></div>
+
+      <!-- Navigation -->
+      <button class="menu-btn">MENU</button>
+
+      <nav class="menu-overlay">
+        <div class="menu-items">
+          <a href="#home">Home</a>
+          <a href="abtus.html">About</a>
+          <a href="page2.html">Collections</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+          <canvas id="heroCanvas"></canvas>
+          <div class="hero-text">
+            <h1 class="split-text">HAUTE</h1>
+            <p class="reveal-text">Fashion Redefined</p>
+          </div>
+        </section>
+
+        <!-- Collections Grid -->
+        <section id="collections" class="collections">
+          <h2 class="section-title">Latest Collections</h2>
+          <div class="collection-grid">
+            <div class="collection-item">
+              <img
+                data-src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&q=80"
+                alt="Summer Collection"
+                width="800"
+                height="600"
+                loading="lazy"
+              />
+              <div class="collection-content">
+                <span class="collection-season">Summer'24</span>
+                <h2>Ethereal Essence</h2>
+                <p>Discover the collection</p>
+                <div class="collection-hover-content">
+                  <button class="explore-btn">Explore Collection</button>
+                </div>
+              </div>
+            </div>
+            <div class="collection-item">
+              <img
+                data-src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80"
+                alt="Autumn Collection"
+                width="800"
+                height="600"
+                loading="lazy"
+              />
+              <div class="collection-content">
+                <span class="collection-season">Autumn'24</span>
+                <h2>Urban Nomad</h2>
+                <p>Discover the collection</p>
+                <div class="collection-hover-content">
+                  <button class="explore-btn">Explore Collection</button>
+                </div>
+              </div>
+            </div>
+            <div class="collection-item">
+              <img
+                data-src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&q=80"
+                alt="Winter Collection"
+                width="800"
+                height="600"
+                loading="lazy"
+              />
+              <div class="collection-content">
+                <span class="collection-season">Winter'24</span>
+                <h2>Nordic Tales</h2>
+                <p>Discover the collection</p>
+                <div class="collection-hover-content">
+                  <button class="explore-btn">Explore Collection</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section">
+          <h2 class="section-title">Our Story</h2>
+          <div class="text-content">
+            <p>
+              In the heart of artisanal craftsmanship lies our passion for
+              creating timeless pieces that speak to the soul. Each creation is
+              a testament to our dedication to quality and artistic expression.
+            </p>
+
+            <p>
+              Our journey began with a simple vision: to craft pieces that blend
+              traditional techniques with contemporary aesthetics. Today, that
+              vision has evolved into a celebration of artistic excellence and
+              innovative design.
+            </p>
+
+            <p>
+              We believe in the power of handcrafted excellence, where every
+              detail tells a story and every piece carries the mark of authentic
+              craftsmanship. Our commitment to quality is unwavering, as we
+              continue to push the boundaries of artistic expression.
+            </p>
+          </div>
+        </section>
+
+        <!-- Lookbook Section -->
+        <section class="lookbook-section" id="lookbook">
+          <h2 class="section-title">Lookbook</h2>
+
+          <!-- Summer 2024 Collection -->
+          <div class="season-collection">
+            <h3 class="season-title">Summer 2024</h3>
+            <div class="lookbook-grid">
+              <div class="lookbook-item">
+                <img
+                  src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d"
+                  alt="Summer fashion 1"
+                  width="800"
+                  height="600"
+                  loading="lazy"
+                />
+              </div>
+              <div class="lookbook-item">
+                <img
+                  src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f"
+                  alt="Summer fashion 2"
+                  width="800"
+                  height="600"
+                  loading="lazy"
+                />
+              </div>
+              <div class="lookbook-item">
+                <img
+                  src="https://images.unsplash.com/photo-1523359346063-d879354c0ea5"
+                  alt="Summer fashion 3"
+                  width="800"
+                  height="600"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Footer -->
+        <footer class="site-footer">
+          <div class="footer-content">
+            <div class="footer-section">
+              <h4>HAUTE</h4>
+              <p>Fashion Curator & Artisanal Design House</p>
+            </div>
+
+            <div class="footer-section">
+              <h4>Contact</h4>
+              <p>Email: hello@haute.com</p>
+              <p>Phone: +1 (555) 123-4567</p>
+              <p>Address: 123 Fashion Avenue<br />New York, NY 10001</p>
+            </div>
+
+            <div class="footer-section">
+              <h4>Navigation</h4>
+              <nav class="footer-nav">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#collections">Collections</a>
+                <a href="#lookbook">Lookbook</a>
+              </nav>
+            </div>
+
+            <div class="footer-section">
+              <h4>Follow Us</h4>
+              <div class="social-links">
+                <a href="#" aria-label="Instagram">Instagram</a>
+                <a href="#" aria-label="Pinterest">Pinterest</a>
+                <a href="#" aria-label="Facebook">Facebook</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <p>&copy; 2024 HAUTE. All rights reserved.</p>
+            <div class="footer-legal">
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+            </div>
+          </div>
+        </footer>
+      </main>
+
+      <script src="script.js"></script>
+    </div>
+  </body>
+</html>

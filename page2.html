@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fashion Category Selector</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        background: linear-gradient(135deg, #f5efe6 0%, #e8dfd8 100%);
+        font-family: "Cormorant Garamond", serif;
+        overflow-x: hidden;
+        padding: 0;
+        padding-top: 80px;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: calc(100% - 4rem);
+        padding: 1rem 2rem;
+        background: rgba(245, 239, 230, 0.95);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        transition: background 0.3s, box-shadow 0.3s;
+        box-sizing: border-box;
+      }
+
+      .navbar-logo a {
+        font-family: "Italiana", serif;
+        font-size: 2rem;
+        text-decoration: none;
+        color: #2c2420;
+      }
+
+      .navbar-menu {
+        list-style: none;
+        display: flex;
+        gap: 2rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar-menu a {
+        color: #2c2420;
+        text-decoration: none;
+        font-family: "Montserrat", sans-serif;
+        font-size: 1rem;
+        transition: color 0.3s;
+      }
+
+      .navbar-menu a:hover {
+        color: #c2a399;
+      }
+
+      .hero-section {
+        text-align: center;
+        padding: 60px 20px;
+        background-color: #e8dfd8;
+        color: #2c2420;
+      }
+
+      .hero-section h1 {
+        font-family: "Italiana", serif;
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+
+      .hero-section p {
+        font-family: "Montserrat", sans-serif;
+        font-size: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .carousel-container {
+        perspective: 1200px;
+        margin: 120px auto;
+        position: relative;
+        width: 90%;
+        max-width: 1200px;
+        height: 400px;
+      }
+
+      .carousel {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateZ(-400px);
+      }
+
+      .carousel-item {
+        position: absolute;
+        width: 250px;
+        height: 400px;
+        left: 50%;
+        top: 50%;
+        margin-left: -125px;
+        margin-top: -200px;
+        cursor: pointer;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+          border-color 0.3s ease;
+        backface-visibility: hidden;
+        border: 3px solid transparent;
+      }
+
+      .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+      }
+
+      .carousel-item.selected {
+        border: 3px solid #c2a399;
+        box-shadow: 0 0 20px rgba(194, 163, 153, 0.3);
+      }
+
+      .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.8);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+      }
+
+      .nav-button:hover {
+        background: #c2a399;
+        color: white;
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .nav-button.left {
+        left: 20px;
+      }
+
+      .nav-button.right {
+        right: 20px;
+      }
+
+      h2 {
+        text-align: center;
+        font-family: "Italiana", serif;
+        color: #2c2420;
+        margin-bottom: 20px;
+        z-index: 1;
+        position: relative;
+      }
+
+      .generate-button {
+        display: block;
+        margin: 180px auto 80px;
+        padding: 15px 40px;
+        font-size: 20px;
+        font-family: "Montserrat", sans-serif;
+        color: #f5efe6;
+        background-color: #2c2420;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .generate-button:not(:disabled) {
+        opacity: 1;
+        cursor: pointer;
+        background-color: #2c2420;
+      }
+
+      .generate-button:not(:disabled):hover {
+        background-color: #c2a399;
+        transform: scale(1.05);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s;
+      }
+
+      a:hover {
+        color: #c2a399;
+      }
+
+      .trending-styles {
+        margin: 80px auto;
+        width: 90%;
+        max-width: 1200px;
+        text-align: center;
+        background: linear-gradient(135deg, #f5efe6 0%, #e8dfd8 100%);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .section-title {
+        font-family: "Italiana", serif;
+        font-size: 36px;
+        color: #2c2420;
+        margin-bottom: 10px;
+      }
+
+      .section-description {
+        font-family: "Montserrat", sans-serif;
+        font-size: 18px;
+        color: #2c2420;
+        margin-bottom: 30px;
+      }
+
+      .trending-grid {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .trending-item {
+        width: 30%;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .trending-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .trending-item img {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .trending-content {
+        padding: 20px;
+        font-family: "Montserrat", sans-serif;
+        color: #2c2420;
+      }
+
+      .trending-content h3 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .trending-content p {
+        margin: 10px 0 0;
+        font-size: 16px;
+      }
+
+      .fashion-tips {
+        margin: 80px auto;
+        width: 90%;
+        max-width: 1200px;
+        text-align: center;
+        background: #f5efe6;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .fashion-tips h2 {
+        font-family: "Italiana", serif;
+        font-size: 36px;
+        color: #2c2420;
+        margin-bottom: 20px;
+      }
+
+      .fashion-tips p {
+        font-family: "Montserrat", sans-serif;
+        font-size: 18px;
+        color: #2c2420;
+        margin-bottom: 20px;
+      }
+
+      @media screen and (max-width: 768px) {
+        .navbar {
+          padding: 1rem;
+          width: calc(100% - 2rem);
+        }
+
+        .navbar-menu {
+          gap: 1rem;
+        }
+
+        .navbar-logo a {
+          font-size: 1.5rem;
+        }
+
+        .navbar-menu a {
+          font-size: 0.9rem;
+        }
+      }
+
+      /* Style Guide Section */
+      .style-guide {
+        padding: 4rem 2rem;
+        background: linear-gradient(135deg, #f5efe6 0%, #e8dfd8 100%);
+      }
+
+      .style-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .style-card {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        backdrop-filter: blur(10px);
+      }
+
+      .style-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .style-btn {
+        margin-top: 1rem;
+        padding: 0.8rem 1.5rem;
+        background: #2c2420;
+        color: #f5efe6;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .style-btn:hover {
+        background: #c2a399;
+      }
+
+      /* Outfit of the Day */
+      .ootd-section {
+        padding: 4rem 2rem;
+        background: #fff;
+      }
+
+      .ootd-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: #f5efe6;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .ootd-image {
+        position: relative;
+        height: 400px;
+      }
+
+      .ootd-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .ootd-overlay {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+      }
+
+      .ootd-tag {
+        background: #2c2420;
+        color: #f5efe6;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+      }
+
+      .ootd-details {
+        padding: 2rem;
+      }
+
+      .ootd-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .item-tag {
+        background: #e8dfd8;
+        color: #2c2420;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-size: 0.9rem;
+      }
+
+      @media screen and (max-width: 768px) {
+        .style-cards {
+          grid-template-columns: 1fr;
+        }
+
+        .ootd-container {
+          grid-template-columns: 1fr;
+        }
+
+        .ootd-image {
+          height: 300px;
+        }
+      }
+
+      /* Update/add these CSS rules */
+
+      .carousel-container {
+        perspective: 1200px;
+        margin: 120px auto;
+        position: relative;
+        width: 90%;
+        max-width: 1200px;
+        height: 400px;
+      }
+
+      /* Add specific spacing for sections after body shape */
+      #height.carousel-container,
+      #skin-tone.carousel-container,
+      #occasion.carousel-container,
+      #weather.carousel-container {
+        margin-top: 180px;
+      }
+
+      /* Style the section headings for better visual hierarchy */
+      .carousel-container h2 {
+        text-align: center;
+        font-family: "Italiana", serif;
+        color: #2c2420;
+        margin-bottom: 40px;
+        font-size: 2.5rem;
+        position: relative;
+        padding-bottom: 15px;
+      }
+
+      /* Add decorative line under headings */
+      .carousel-container h2::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background-color: #c2a399;
+      }
+
+      /* Add more space before the generate button */
+      .generate-button {
+        margin: 180px auto 80px;
+      }
+
+      /* Adjust hero section spacing */
+      .hero-section {
+        margin-bottom: 100px;
+        padding: 100px 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-logo"><a href="index.html">HAUTE</a></div>
+      <ul class="navbar-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="page2.html">Collections</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero-section">
+      <h1>Welcome to the Fashion Category Selector</h1>
+      <p>
+        Explore and select the best fashion styles that suit your unique
+        personality and preferences. Dive into our curated collections and
+        discover the latest trends in the fashion world.
+      </p>
+    </section>
+
+    <div class="carousel-container" id="body-shape">
+      <h2>Body Shape</h2>
+      <div class="carousel" id="carousel-body-shape">
+        <div
+          class="carousel-item"
+          style="transform: rotateY(0deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1719937206642-ca0cd57198cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8"
+            alt="Hourglass"
+          />
+          <div class="carousel-caption">Hourglass</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(72deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://plus.unsplash.com/premium_photo-1730828574410-47e0ca956aea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Pear"
+          />
+          <div class="carousel-caption">Pear</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(144deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://plus.unsplash.com/premium_photo-1732018941995-64612d94991c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D"
+            alt="Rectangle"
+          />
+          <div class="carousel-caption">Rectangle</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(216deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1732054085782-a6514029ef12?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyNXx8fGVufDB8fHx8fA%3D%3D"
+            alt="Apple"
+          />
+          <div class="carousel-caption">Apple</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(288deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1732321221818-3bb8fdd9052d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzNnx8fGVufDB8fHx8fA%3D%3D"
+            alt="Inverted Triangle"
+          />
+          <div class="carousel-caption">Inverted Triangle</div>
+        </div>
+      </div>
+      <button
+        class="nav-button left"
+        onclick="rotateCarousel('carousel-body-shape', -1)"
+      >
+        &#10094;
+      </button>
+      <button
+        class="nav-button right"
+        onclick="rotateCarousel('carousel-body-shape', 1)"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <!-- Additional Categories -->
+    <div class="carousel-container" id="height">
+      <h2>Height</h2>
+      <div class="carousel" id="carousel-height">
+        <div
+          class="carousel-item"
+          style="transform: rotateY(0deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1719937206642-ca0cd57198cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8"
+            alt="Petite"
+          />
+          <div class="carousel-caption">Petite</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(72deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://plus.unsplash.com/premium_photo-1730828574410-47e0ca956aea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Tall"
+          />
+          <div class="carousel-caption">Tall</div>
+        </div>
+        <!-- Add more items as needed -->
+      </div>
+      <button
+        class="nav-button left"
+        onclick="rotateCarousel('carousel-height', -1)"
+      >
+        &#10094;
+      </button>
+      <button
+        class="nav-button right"
+        onclick="rotateCarousel('carousel-height', 1)"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <div class="carousel-container" id="skin-tone">
+      <h2>Skin Tone</h2>
+      <div class="carousel" id="carousel-skin-tone">
+        <div
+          class="carousel-item"
+          style="transform: rotateY(0deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1719937206642-ca0cd57198cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8"
+            alt="Fair"
+          />
+          <div class="carousel-caption">Fair</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(72deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://plus.unsplash.com/premium_photo-1730828574410-47e0ca956aea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Medium"
+          />
+          <div class="carousel-caption">Medium</div>
+        </div>
+        <!-- Add more items as needed -->
+      </div>
+      <button
+        class="nav-button left"
+        onclick="rotateCarousel('carousel-skin-tone', -1)"
+      >
+        &#10094;
+      </button>
+      <button
+        class="nav-button right"
+        onclick="rotateCarousel('carousel-skin-tone', 1)"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <div class="carousel-container" id="occasion">
+      <h2>Occasion</h2>
+      <div class="carousel" id="carousel-occasion">
+        <div
+          class="carousel-item"
+          style="transform: rotateY(0deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1719937206642-ca0cd57198cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8"
+            alt="Casual"
+          />
+          <div class="carousel-caption">Casual</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(72deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://plus.unsplash.com/premium_photo-1730828574410-47e0ca956aea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Formal"
+          />
+          <div class="carousel-caption">Formal</div>
+        </div>
+        <!-- Add more items as needed -->
+      </div>
+      <button
+        class="nav-button left"
+        onclick="rotateCarousel('carousel-occasion', -1)"
+      >
+        &#10094;
+      </button>
+      <button
+        class="nav-button right"
+        onclick="rotateCarousel('carousel-occasion', 1)"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <div class="carousel-container" id="weather">
+      <h2>Weather</h2>
+      <div class="carousel" id="carousel-weather">
+        <div
+          class="carousel-item"
+          style="transform: rotateY(0deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1719937206642-ca0cd57198cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8"
+            alt="Sunny"
+          />
+          <div class="carousel-caption">Sunny</div>
+        </div>
+        <div
+          class="carousel-item"
+          style="transform: rotateY(72deg) translateZ(400px)"
+          onclick="selectItem(this)"
+        >
+          <img
+            src="https://plus.unsplash.com/premium_photo-1730828574410-47e0ca956aea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Rainy"
+          />
+          <div class="carousel-caption">Rainy</div>
+        </div>
+        <!-- Add more items as needed -->
+      </div>
+      <button
+        class="nav-button left"
+        onclick="rotateCarousel('carousel-weather', -1)"
+      >
+        &#10094;
+      </button>
+      <button
+        class="nav-button right"
+        onclick="rotateCarousel('carousel-weather', 1)"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <!-- New Trending Styles Section -->
+    <section class="trending-styles">
+      <h2 class="section-title">Trending Styles</h2>
+      <p class="section-description">
+        Discover the latest trends in fashion and elevate your style with our
+        curated picks.
+      </p>
+      <div class="trending-grid">
+        <div class="trending-item">
+          <img
+            src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80"
+            alt="Bohemian Chic"
+          />
+          <div class="trending-content">
+            <h3>Bohemian Chic</h3>
+            <p>Explore the latest in bohemian fashion.</p>
+          </div>
+        </div>
+        <div class="trending-item">
+          <img
+            src="https://plus.unsplash.com/premium_photo-1669704098776-1408db9ea894?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2xvdGhlcyUyMHN0cmVldHdlYXJ8ZW58MHx8MHx8fDA%3D"
+            alt="Streetwear Vibes"
+          />
+          <div class="trending-content">
+            <h3>Streetwear Vibes</h3>
+            <p>Discover the urban streetwear trends.</p>
+          </div>
+        </div>
+        <div class="trending-item">
+          <img
+            src="https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=80"
+            alt="Minimalist Elegance"
+          />
+          <div class="trending-content">
+            <h3>Minimalist Elegance</h3>
+            <p>Embrace the simplicity of minimalist fashion.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fashion Tips Section -->
+    <section class="fashion-tips">
+      <h2>Fashion Tips</h2>
+      <p>
+        Stay ahead of the fashion curve with our expert tips and advice. Learn
+        how to mix and match styles, choose the right accessories, and create a
+        wardrobe that reflects your personal style.
+      </p>
+    </section>
+
+    <!-- Style Guide Section -->
+    <section class="style-guide">
+      <h2>Personal Style Guide</h2>
+      <div class="style-cards">
+        <div class="style-card">
+          <div class="card-icon">🎨</div>
+          <h3>Color Analysis</h3>
+          <p>
+            Discover your seasonal color palette and learn which colors
+            complement your natural features.
+          </p>
+          <button class="style-btn">Analyze Colors</button>
+        </div>
+        <div class="style-card">
+          <div class="card-icon">📏</div>
+          <h3>Measurements</h3>
+          <p>
+            Track your measurements and get personalized fit recommendations.
+          </p>
+          <button class="style-btn">Size Guide</button>
+        </div>
+        <div class="style-card">
+          <div class="card-icon">💫</div>
+          <h3>Style Quiz</h3>
+          <p>Take our quiz to define your personal style aesthetic.</p>
+          <button class="style-btn">Start Quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Outfit of the Day -->
+    <section class="ootd-section">
+      <h2>Outfit of the Day</h2>
+      <div class="ootd-container">
+        <div class="ootd-image">
+          <img
+            src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc"
+            alt="Outfit of the Day"
+          />
+          <div class="ootd-overlay">
+            <span class="ootd-tag">Today's Look</span>
+          </div>
+        </div>
+        <div class="ootd-details">
+          <h3>Urban Sophisticate</h3>
+          <p>
+            A perfect blend of comfort and style for the modern fashionista.
+          </p>
+          <div class="ootd-items">
+            <span class="item-tag">Blazer</span>
+            <span class="item-tag">High-Waist Pants</span>
+            <span class="item-tag">Statement Boots</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <button class="generate-button" onclick="generateSelection()" disabled>
+      Generate Your Style Guide
+    </button>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeCarousels();
+      });
+
+      function initializeCarousels() {
+        document.querySelectorAll(".carousel").forEach((carousel) => {
+          const items = carousel.querySelectorAll(".carousel-item");
+          const totalItems = items.length;
+
+          // Position items in a circle
+          items.forEach((item, index) => {
+            const angle = index * (360 / totalItems);
+            item.style.transform = `rotateY(${angle}deg) translateZ(400px)`;
+          });
+        });
+      }
+
+      function rotateCarousel(carouselId, direction) {
+        const carousel = document.getElementById(carouselId);
+        const currentRotation = getRotation(carousel);
+        const newRotation =
+          currentRotation + direction * (360 / carousel.children.length);
+
+        carousel.style.transform = `translateZ(-400px) rotateY(${newRotation}deg)`;
+      }
+
+      function getRotation(element) {
+        const transform = element.style.transform;
+        const match = transform.match(/rotateY\(([-\d.]+)deg\)/);
+        return match ? parseFloat(match[1]) : 0;
+      }
+
+      function selectItem(item) {
+        const carousel = item.closest(".carousel");
+        const carouselId = carousel.id;
+        const items = carousel.querySelectorAll(".carousel-item");
+        const selectedIndex = Array.from(items).indexOf(item);
+        const anglePerItem = 360 / items.length;
+        const targetRotation = -(selectedIndex * anglePerItem);
+
+        // Remove selected class from all items
+        items.forEach((item) => item.classList.remove("selected"));
+
+        // Add selected class to clicked item with a slight delay for better visual feedback
+        setTimeout(() => {
+          item.classList.add("selected");
+        }, 100);
+
+        // Update selection indicator
+        const caption = item.querySelector(".carousel-caption").textContent;
+        const indicator = carousel.parentElement.querySelector(
+          ".selection-indicator .selected-value"
+        );
+        indicator.textContent = caption;
+
+        // Save selection
+        saveSelection(carouselId, caption);
+
+        // Rotate carousel
+        carousel.style.transform = `translateZ(-400px) rotateY(${targetRotation}deg)`;
+      }
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        const navbar = document.querySelector(".navbar");
+        if (window.scrollY > 50) {
+          navbar.style.background = "rgba(245, 239, 230, 0.98)";
+          navbar.style.boxShadow = "0 2px 10px rgba(0,0,0,0.1)";
+        } else {
+          navbar.style.background = "rgba(245, 239, 230, 0.95)";
+          navbar.style.boxShadow = "none";
+        }
+      });
+
+      // Update the generateSelection function
+      function generateSelection() {
+        const selections = {
+          "Body Shape":
+            localStorage.getItem("carousel-body-shape") || "Not selected",
+          Height: localStorage.getItem("carousel-height") || "Not selected",
+          "Skin Tone":
+            localStorage.getItem("carousel-skin-tone") || "Not selected",
+          Occasion: localStorage.getItem("carousel-occasion") || "Not selected",
+          Weather: localStorage.getItem("carousel-weather") || "Not selected",
+        };
+
+        // Create alert message
+        let message = "Your Selections:\n\n";
+        for (const [category, selection] of Object.entries(selections)) {
+          message += `${category}: ${selection}\n`;
+        }
+
+        // Show alert with selections
+        alert(message);
+      }
+
+      // Update the button click handler in your HTML
+      document.querySelector(".generate-button").onclick = generateSelection;
+
+      // Update selectItem function to be more responsive
+      function selectItem(item) {
+        const carousel = item.closest(".carousel");
+        const carouselId = carousel.id;
+        const items = carousel.querySelectorAll(".carousel-item");
+        const selectedIndex = Array.from(items).indexOf(item);
+        const anglePerItem = 360 / items.length;
+        const targetRotation = -(selectedIndex * anglePerItem);
+
+        // Remove selected class from all items
+        items.forEach((item) => item.classList.remove("selected"));
+
+        // Add selected class to clicked item with a slight delay for better visual feedback
+        setTimeout(() => {
+          item.classList.add("selected");
+        }, 100);
+
+        // Update selection indicator
+        const caption = item.querySelector(".carousel-caption").textContent;
+        const indicator = carousel.parentElement.querySelector(
+          ".selection-indicator .selected-value"
+        );
+        indicator.textContent = caption;
+
+        // Save selection
+        saveSelection(carouselId, caption);
+
+        // Rotate carousel
+        carousel.style.transform = `translateZ(-400px) rotateY(${targetRotation}deg)`;
+      }
+
+      // Update the generate button text based on selection state
+      function updateGenerateButton() {
+        const requiredCategories = [
+          "carousel-body-shape",
+          "carousel-height",
+          "carousel-skin-tone",
+          "carousel-occasion",
+          "carousel-weather",
+        ];
+
+        const generateButton = document.querySelector(".generate-button");
+        const allSelected = requiredCategories.every(
+          (category) => localStorage.getItem(category) !== null
+        );
+
+        generateButton.disabled = !allSelected;
+        generateButton.textContent = allSelected
+          ? "Generate Your Style Guide"
+          : "Please Select All Categories";
+      }
+
+      // Add this function to your existing code
+      function saveSelection(categoryId, value) {
+        // Store the selection
+        localStorage.setItem(categoryId, value);
+
+        // Log for debugging
+        console.log(`Saved ${value} for ${categoryId}`);
+        console.log("Current localStorage:", localStorage);
+
+        updateGenerateButton();
+      }
+
+      // Update this function in your existing code
+      function updateGenerateButton() {
+        const requiredCategories = [
+          "carousel-body-shape",
+          "carousel-height",
+          "carousel-skin-tone",
+          "carousel-occasion",
+          "carousel-weather",
+        ];
+
+        // Check if all categories are selected
+        const allSelected = requiredCategories.every((category) => {
+          const value = localStorage.getItem(category);
+          console.log(`Category ${category}: ${value}`); // Debug log
+          return value !== null && value !== "None";
+        });
+
+        console.log("All selected:", allSelected); // Debug log
+
+        const generateButton = document.querySelector(".generate-button");
+        generateButton.disabled = !allSelected;
+        generateButton.style.opacity = allSelected ? "1" : "0.5";
+        generateButton.style.cursor = allSelected ? "pointer" : "not-allowed";
+      }
+
+      // Update generate button click handler
+      function generateSelection() {
+        const selections = {
+          "Body Shape": localStorage.getItem("carousel-body-shape"),
+          Height: localStorage.getItem("carousel-height"),
+          "Skin Tone": localStorage.getItem("carousel-skin-tone"),
+          Occasion: localStorage.getItem("carousel-occasion"),
+          Weather: localStorage.getItem("carousel-weather"),
+        };
+
+        let message = "Your Selections:\n\n";
+        for (const [category, selection] of Object.entries(selections)) {
+          message += `${category}: ${selection}\n`;
+        }
+
+        alert(message);
+      }
+
+      // Make sure this is called when the page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        // Clear previous selections (optional)
+        // localStorage.clear();
+
+        // Initialize button state
+        updateGenerateButton();
+      });
+    </script>
+  </body>
+</html>
